@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# File: /usr/bin/vx-package-new
+# Permissions: root:root 755
+# Syntax: vx-package-new <pkg_name> [<pkg_version>]
+# Author: Alberto Gacías <alberto@migasfree.org>
+
+_PKG=$1 # Package name (without version)
+_VER=${2:"1.0-1"}
+
+if [ -d $_PKG ]
+then
+    echo "Error: $_PKG directory already exists!"
+    exit 1
+else
+    mkdir $_PKG
+fi
+
+/bin/grep --quiet ^DEBEMAIL= ~/.bashrc
+if [ $? -ne 0 ]
+then
+    echo "Add to the end of your ~/.bashrc file:"
+    echo "DEBEMAIL=your_email@mail.com"
+    echo 'DEBFULLNAME="your fullname"'
+    echo "export DEBEMAIL DEBFULLNAME"
+
+    exit 2
+fi
+
+if [ -z "$DEBEMAIL" -o -z "$DEBFULLNAME" ]
+then
+    . ~/.bashrc
+fi
+
+if [ -z "$DEBEMAIL" -o -z "$DEBFULLNAME" ]
+then
+    echo "Can not continue: DEBEMAIL and DEBFULLNAME environment variables must be exist"
+    exit 2
+fi
+
+cd $_PKG
+yes "s" | /usr/bin/dh_make -n -p ${_PKG}_${_VER}
+/usr/bin/xdg-open ./debian

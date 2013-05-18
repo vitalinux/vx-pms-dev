@@ -1,0 +1,8 @@
+vx-pms-dev (1.0-1) unstable; urgency=low
+
+  * Este paquete nace para desarrollar paquetes en la distro.
+  * Tiene como dependencia a vx-migasfree-client porque así nos aseguramos que
+    tenemos el cliente configurado correctamente para subir paquetes a la
+    versión adecuada.
+
+ -- Jose Antonio Chavarría <jachavar@gmail.com>  Sat, 18 May 2013 11:09:54 +0200

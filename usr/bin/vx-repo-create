@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# File: /usr/bin/vx-repo-create
+# Permissions: root:root 755
+# Syntax: vx-repo-create <directory>
+# Author: Jose Antonio Chavarría <jachavar@gmail.com>
+
+_DIR="$1"
+
+if [ -z "$_DIR" ]
+then
+    echo "Usage: $(/usr/bin/basename $0) directory"
+    exit 1
+fi
+
+/usr/bin/dpkg-scanpackages --multiversion $_DIR > $_DIR/Packages
+_EXIT=$?
+
+echo "Add a file with content 'deb file://$_DIR ./' at /etc/apt/sources.list.d/"
+echo "After execute 'apt-get update' to have it available"
+
+exit $_EXIT

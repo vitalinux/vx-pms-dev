@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# File: /usr/bin/vx-repo-download
+# Permissions: root:root 755
+# Syntax: vx-repo-download <repo_name>
+# Author: Alberto Gacías <alberto@migasfree.org>
+
+function download
+{
+    local _SERIE_POCKET=$1
+
+    download_repo "$_SERIE_POCKET" "main"
+    download_repo "$_SERIE_POCKET" "multiverse"
+    download_repo "$_SERIE_POCKET" "restricted"
+    download_repo "$_SERIE_POCKET" "universe"
+}
+
+function download_repo
+{
+    local _SERIES=$1
+    local _REPO=$2
+
+    local _TARGET=${_SERIES}-${_REPO}
+    local _SERVER=http://en.archive.ubuntu.com/ubuntu
+    local _PKGS=Packages
+    local _PATH=$(pwd)
+
+    /usr/bin/wget $_SERVER/dists/$_SERIES/$_REPO/binary-i386/$_PKGS.bz2
+    /bin/bzip2 -d $_PKGS.bz2
+
+    local _FILES=$(LC_ALL=POSIX /bin/grep "^Filename:" $_PKGS | /usr/bin/awk '{print $2}' | /usr/bin/sort)
+    echo "$_FILES" > Packages-$_TARGET
+
+    mkdir -p $_TARGET
+    cd "$_TARGET"
+
+    for _ITEM in $_FILES
+    do
+        local _FILE=${_ITEM:6+${#_REPO}}
+        mkdir -p $(/usr/bin/dirname $_FILE)
+        echo "Downloading $_SERIES $_ITEM"
+        /usr/bin/wget -c -t1 $_SERVER/$_ITEM -O $_FILE
+    done
+
+    cd "$_PATH"
+    rm $_PKGS
+
+    echo "Now you can execute (p.e.): sudo migasfree-upload -m 'VX-BASE' -s 'base' -d $_TARGET"
+}
+
+if [ $# -ne 1 ]
+then
+    echo "Usage:"
+    echo -e "\t$(/usr/bin/basename $0) precise"
+    echo -e "\t$(/usr/bin/basename $0) precise-security"
+    echo -e "\t$(/usr/bin/basename $0) precise-updates"
+    echo -e "\t$(/usr/bin/basename $0) precise-backports"
+    exit 1
+fi
+
+download $1

@@ -1,0 +1,13 @@
+Source: vx-pms-dev
+Section: utils
+Priority: extra
+Maintainer: Jose Antonio Chavarría <jachavar@gmail.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+Homepage: https://github.com/vitalinux/vx-pms-dev
+
+Package: vx-pms-dev
+Architecture: all
+Depends: ${misc:Depends}, devscripts, debhelper, dh-make, dpkg-dev, vx-migasfree-client
+Description: Scripts for creating Vitalinux packages.
+ It also incorporates scripts for maintaining the distro repositories.

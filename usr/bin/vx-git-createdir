@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# File: /usr/bin/vx-git-createdir
+# Permissions: root:root 755
+# Syntax: vx-git-createdir <PATH>
+# Author: Alberto Gacías <alberto@migasfree.org>
+
+# Creates a file called .createdir at empty directories from a path
+
+_PATH=$1
+if [ -z "$_PATH" ]
+then
+    echo "Enter a directory as a parameter"
+    exit 1
+fi
+
+IFS="|"
+for _DIR in $(find $_PATH -depth -empty -type d -printf "%h/%f$IFS")
+do
+    if ! [[ "$_DIR" == *.git/* ]]  # We exclude .git directory
+    then
+        touch "$_DIR/.createdir"
+        echo "CREADO $_DIR/.createdir"
+    fi
+done

@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# File: /usr/bin/vx-package-build
+# Permissions: root:root 755
+# Syntax: vx-package-build <dir>
+# Author: Jose Antonio Chavarría <jachavar@gmail.com>
+
+_PACKAGE="$1"
+
+_CTRL_FILE=$_PACKAGE/debian/control
+if [ ! -r $_CTRL_FILE ]
+then
+    echo "Error: $_CTRL_FILE file not found. Can not continue."
+    echo "This command must be run from the directory containing the package directory"
+    exit 1
+fi
+
+_NAME=$(/usr/bin/vx-file-get-key --key "Package" --separator ":" --file $_CTRL_FILE)
+_ARCH=$(/usr/bin/vx-file-get-key --key "Architecture" --separator ":" --file $_CTRL_FILE)
+
+_CHANGELOG=$_PACKAGE/debian/changelog
+_VERSION_RELEASE=$(/usr/bin/head -1 $_CHANGELOG | /usr/bin/cut --delimiter=' ' --fields=2)
+_VERSION_RELEASE=${_VERSION_RELEASE//(/}
+_VERSION_RELEASE=${_VERSION_RELEASE//)/}
+
+# remove files finished in '~' (backup files)
+rm -f $(echo $(/usr/bin/find $_PACKAGE -name "*~")) || :
+
+# create package
+cd $_PACKAGE
+/usr/bin/debuild --no-tgz-check -us -uc
+if [ $? -ne 0 ]
+then
+    echo
+    echo "Error creating package $_NAME"
+    cd ..
+    exit 1
+fi
+
+cd ..
+
+# upload package
+sudo /usr/bin/migasfree-upload --file ${_NAME}_${_VERSION_RELEASE}_${_ARCH}.deb --store org
+if [ $? -ne 0 ]
+then
+    echo
+    echo "Error uploading package ${_NAME}_${_VERSION_RELEASE}_${_ARCH}.deb"
+    exit 2
+fi
+
+# upload source package
+[ -f ${_NAME}_${_VERSION_RELEASE}.tar.gz ] && sudo /usr/bin/migasfree-upload --regular-file --file ${_NAME}_${_VERSION_RELEASE}.tar.gz --store org.src
+
+exit $?
