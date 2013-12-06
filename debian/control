@@ -8,6 +8,6 @@ Homepage: https://github.com/vitalinux/vx-pms-dev
 
 Package: vx-pms-dev
 Architecture: all
-Depends: ${misc:Depends}, devscripts, debhelper, dh-make, dpkg-dev, vx-migasfree-client
+Depends: ${misc:Depends}, devscripts, debhelper, dh-make, dpkg-dev, virtual-migasfree-client
 Description: Scripts for creating Vitalinux packages.
  It also incorporates scripts for maintaining the distro repositories.
