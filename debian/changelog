@@ -3,7 +3,7 @@ vx-pms-dev (1.0-2) unstable; urgency=low
   * Se corrige la dependencia con vx-migasfree-client. Mejor que sea con un
     paquete virtual (closes #1).
 
- -- Jose Antonio Chavarría <jachavar@gmail.com>  Fri, 6 Dic 2013 10:35:02 +0200
+ -- Jose Antonio Chavarría <jachavar@gmail.com>  Sat, 7 Dec 2013 12:25:02 +0200
 
 vx-pms-dev (1.0-1) unstable; urgency=low
 
