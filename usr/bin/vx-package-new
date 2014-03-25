@@ -6,7 +6,7 @@
 # Author: Alberto Gacías <alberto@migasfree.org>
 
 _PKG=$1 # Package name (without version)
-_VER=${2:"1.0-1"}
+_VER=${2:-"1.0-1"}
 
 if [ -d $_PKG ]
 then
