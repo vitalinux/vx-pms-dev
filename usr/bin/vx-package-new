@@ -8,14 +8,6 @@
 _PKG=$1 # Package name (without version)
 _VER=${2:-"1.0-1"}
 
-if [ -d $_PKG ]
-then
-    echo "Error: $_PKG directory already exists!"
-    exit 1
-else
-    mkdir $_PKG
-fi
-
 /bin/grep --quiet ^DEBEMAIL= ~/.bashrc
 if [ $? -ne 0 ]
 then
@@ -36,6 +28,14 @@ if [ -z "$DEBEMAIL" -o -z "$DEBFULLNAME" ]
 then
     echo "Can not continue: DEBEMAIL and DEBFULLNAME environment variables must be exist"
     exit 2
+fi
+
+if [ -d $_PKG ]
+then
+    echo "Error: $_PKG directory already exists!"
+    exit 1
+else
+    mkdir $_PKG
 fi
 
 cd $_PKG
