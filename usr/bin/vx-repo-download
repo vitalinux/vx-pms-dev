@@ -25,8 +25,8 @@ function download_repo
     local _PKGS=Packages
     local _PATH=$(pwd)
 
-    /usr/bin/wget $_SERVER/dists/$_SERIES/$_REPO/binary-i386/$_PKGS.bz2
-    /bin/bzip2 -d $_PKGS.bz2
+    /usr/bin/wget $_SERVER/dists/$_SERIES/$_REPO/binary-amd64/$_PKGS.xz
+    /bin/tar xf $_PKGS.xz
 
     local _FILES=$(LC_ALL=POSIX /bin/grep "^Filename:" $_PKGS | /usr/bin/awk '{print $2}' | /usr/bin/sort)
     echo "$_FILES" > Packages-$_TARGET
@@ -51,10 +51,10 @@ function download_repo
 if [ $# -ne 1 ]
 then
     echo "Usage:"
-    echo -e "\t$(/usr/bin/basename $0) precise"
-    echo -e "\t$(/usr/bin/basename $0) precise-security"
-    echo -e "\t$(/usr/bin/basename $0) precise-updates"
-    echo -e "\t$(/usr/bin/basename $0) precise-backports"
+    echo -e "\t$(/usr/bin/basename $0) xenial"
+    echo -e "\t$(/usr/bin/basename $0) xenial-security"
+    echo -e "\t$(/usr/bin/basename $0) xenial-updates"
+    echo -e "\t$(/usr/bin/basename $0) xenial-backports"
     exit 1
 fi
 

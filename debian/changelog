@@ -1,3 +1,9 @@
+vx-pms-dev (1.3-1) unstable; urgency=low
+
+  * Adaptación a Xenial 64 bits.
+
+ -- Jose Antonio Chavarría <jachavar@gmail.com>  Tue, 23 Jan 2018 08:39:35 +0100
+
 vx-pms-dev (1.2-1) unstable; urgency=low
 
   * migasfree-client es dependencia suficiente para instalar el paquete (closes
